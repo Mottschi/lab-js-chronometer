@@ -1,37 +1,50 @@
 class Chronometer {
   constructor() {
-    // ... your code goes here
+    this.currentTime = 0;
+    this.intervalId = null;
   }
 
   start(printTimeCallback) {
-    // ... your code goes here
+    this.intervalId = setInterval(()=>{
+      this.currentTime++;
+      if (typeof printTimeCallback === 'function') printTimeCallback();
+    }, 10);
   }
 
   getMinutes() {
-    // ... your code goes here
+    return Math.floor(this.currentTime / 6000);
   }
 
   getSeconds() {
-    // ... your code goes here
+    return Math.floor(this.currentTime / 100) % 60;
   }
 
   getCentiseconds() {
-    // ... your code goes here
+    return this.currentTime % 100;
   }
 
   computeTwoDigitNumber(value) {
-    // ... your code goes here
+    /* note: specification does not mention whether
+    * value can be a number with 3 or more digits
+    * if that is the case, we could do a modulo 100
+    * to get just the last 2 digits. but assuming we
+    * use it for the seconds, that should not be needed
+    */
+    return `${value < 10 ? '0' : ''}${value}`
   }
 
   stop() {
-    // ... your code goes here
+    clearInterval(this.intervalId);
   }
 
   reset() {
-    // ... your code goes here
+    this.currentTime = 0;
   }
 
   split() {
-    // ... your code goes here
+    const minutes = this.computeTwoDigitNumber(this.getMinutes());
+    const seconds = this.computeTwoDigitNumber(this.getSeconds());
+    const centiSeconds = this.computeTwoDigitNumber(this.getCentiseconds());
+    return `${minutes}:${seconds}.${centiSeconds}`;
   }
 }
